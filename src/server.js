@@ -1,5 +1,6 @@
 import express from "express"; // == const express = require("express");
 import morgan from "morgan";
+import "./db";
 
 import globalRouter from "./routers/globalRouter";
 import videoRouter from "./routers/videoRouter";
@@ -7,7 +8,7 @@ import userRouter from "./routers/userRouter";
 
 const PORT = 4000;
 
-console.log(process.cwd());     //현재 작업 디렉토리 확인 ; 서버를 기동하는 파일 위치 : package.json의 위치
+//console.log(process.cwd());     //현재 작업 디렉토리 확인 ; 서버를 기동하는 파일 위치 : package.json의 위치
 
 const app = express();
 const logger = morgan("dev");

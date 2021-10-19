@@ -10,7 +10,8 @@ export const home = async(req, res) => {
     //2. Promise
     try{
         const videos = await Video.find({});
-        return res.render("home", { pageTitle : "Home", videos : [] });
+        console.log(videos);
+        return res.render("home", { pageTitle : "Home", videos });
     } catch(error) {
         return res.render("server-error", {error});
     }
@@ -35,7 +36,36 @@ export const postEdit = (req, res) => {
 export const getUpload = (req, res) => {
     return res.render("upload", {pageTitle: "Upload Video"});
 };
-export const postUpload = (req, res) => {
-    const { title } = req.body;
-    return res.redirect("/");
+export const postUpload = async (req, res) => {
+    const { title, description, hashtags } = req.body;
+
+    //1. Save
+    // const video = new Video({
+    //     title,
+    //     description,
+    //     createdAt: Date.now(),
+    //     hashtags: hashtags.split(",").map(item => item.indexOf("#") == -1 ? `#${item}` : item),
+    //     meta: {
+    //         views: 0,
+    //         rating: 0,
+    //     },
+    // });
+    // await video.save();
+
+    //2.
+    try{
+        await Video.create({
+            title,
+            description,
+            hashtags: hashtags.split(",").map(item => item.indexOf("#") == -1 ? `#${item}` : item),
+        });
+        return res.redirect("/");
+    } catch(error) {
+        return res.render("upload", {
+            pageTitle: "Upload Video",
+            errorMessage: error._message,
+        });
+    }
+
+   
 };

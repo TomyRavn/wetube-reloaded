@@ -1,13 +1,9 @@
 import express from "express"; // == const express = require("express");
 import morgan from "morgan";
-import "./db";
-import "./models/Video";
 
 import globalRouter from "./routers/globalRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
-
-const PORT = 4000;
 
 //console.log(process.cwd());     //현재 작업 디렉토리 확인 ; 서버를 기동하는 파일 위치 : package.json의 위치
 
@@ -30,26 +26,20 @@ app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 
-//1. inline(Finalware)
-app.get("/", (req, res) => 
-    {
-        return res.send("Hello! Node!");
-    }
-);
+// //1. inline(Finalware)
+// app.get("/", (req, res) => 
+//     {
+//         return res.send("Hello! Node!");
+//     }
+// );
 
-//2. function(Finalware)
-const handleLogin = (req, res) => {
-    return res.send("Login here."); 
-}
+// //2. function(Finalware)
+// const handleLogin = (req, res) => {
+//     return res.send("Login here."); 
+// }
 
-app.get("/login", handleLogin);
-/////////////////////////////////////////////////////////////////////////
-
-
+// app.get("/login", handleLogin);
 
 /////////////////////////////////////////////////////////////////////////
 
-const handleListening = () => 
-    console.log(`Server listening on port http://localhost:${PORT}`);
-
-app.listen(PORT, handleListening);
+export default app;

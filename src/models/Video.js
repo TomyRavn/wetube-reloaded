@@ -11,5 +11,18 @@ const videoSchema = new mongoose.Schema({
     },
 });
 
+//※ Mongoose Middleware 는 반드시 Model 생성 전에 생성
+//=>'save'는 findByIdAndUpdate에서 작동되지 않음
+//videoSchema.pre('save', async function(){
+//    //this => this video
+//    this.hashtags = this.hashtags[0].split(",").map(item => item.startsWith("#") ? item : `#${item}`)
+//})
+
+videoSchema.static('formatHashtags', function(hashtags){
+    return hashtags
+        .split(",")
+        .map( word => (word.startsWith("#") ? word : `#${word}`) );
+})
+
 const movieModel = mongoose.model("Video", videoSchema);
 export default movieModel;

@@ -88,6 +88,11 @@ export const postUpload = async (req, res) => {
             errorMessage: error._message,
         });
     }
-
    
+};
+export const deleteVideo = async (req, res) => {
+    const { id } = req.params;
+    await Video.findByIdAndDelete(id);
+
+    return res.redirect("/");
 };

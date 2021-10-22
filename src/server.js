@@ -1,7 +1,7 @@
 import express from "express"; // == const express = require("express");
 import morgan from "morgan";
 
-import globalRouter from "./routers/globalRouter";
+import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 
@@ -22,7 +22,7 @@ app.set("views", process.cwd() + VIEW_ROUTE + "/views");
 app.use(logger);                                    //Console route log
 app.use(express.urlencoded({ extended: true }));    //<HTML Form> to <JS Object>
 
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 

@@ -1,5 +1,6 @@
 import express from "express"; // == const express = require("express");
 import morgan from "morgan";
+import session from "express-session";
 
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -19,15 +20,35 @@ app.set("views", process.cwd() + VIEW_ROUTE + "/views");
 
 /////////////////////////////////////////////////////////////////////////
 //순서 : 미들웨어부터 먼저
-app.use(logger);                                    //Console route log
-app.use(express.urlencoded({ extended: true }));    //<HTML Form> to <JS Object>
+app.use(logger); //Console route log
+app.use(express.urlencoded({ extended: true })); //<HTML Form> to <JS Object>
+
+app.use(
+  session({
+    secret: "Hello!",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+//TEST PRINT
+//app.use((req, res, next) => {
+    //1. HEADER
+    //console.log(req.headers);
+    //next();
+    //2. SESSION ID
+    //req.sessionStore.all( (error, sessions) => {
+    //    console.log(sessions);
+    //    next();
+    //});
+//});
 
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 
 // //1. inline(Finalware)
-// app.get("/", (req, res) => 
+// app.get("/", (req, res) =>
 //     {
 //         return res.send("Hello! Node!");
 //     }
@@ -35,7 +56,7 @@ app.use("/users", userRouter);
 
 // //2. function(Finalware)
 // const handleLogin = (req, res) => {
-//     return res.send("Login here."); 
+//     return res.send("Login here.");
 // }
 
 // app.get("/login", handleLogin);

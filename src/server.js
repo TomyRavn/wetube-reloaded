@@ -32,16 +32,20 @@ app.use(
 );
 
 //TEST PRINT
-//app.use((req, res, next) => {
-    //1. HEADER
-    //console.log(req.headers);
-    //next();
-    //2. SESSION ID
-    //req.sessionStore.all( (error, sessions) => {
-    //    console.log(sessions);
-    //    next();
-    //});
-//});
+app.use((req, res, next) => {
+//1. HEADER
+//console.log(req.headers);
+//next();
+//2. SESSION ID
+    req.sessionStore.all( (error, sessions) => {
+        console.log(sessions);
+        next();
+    });
+});
+//3. SESSION ID PRINT
+// app.get("/add-one", (req, res, next) => {
+//  return res.send(`${req.session.id}`);
+// });
 
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);

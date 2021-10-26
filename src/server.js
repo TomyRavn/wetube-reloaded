@@ -27,10 +27,15 @@ app.use(express.urlencoded({ extended: true })); //<HTML Form> to <JS Object>
 
 app.use(
   session({
-    secret: "Hello!",
+    secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,     //session을 수정할 때만 세션을 DB에 저장 => (2021.10.26) 현재 수정은 userController 로그인 시에만 이루어짐
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube" }),
+    /* cookie 만료일 지정(milliseconds)
+    cookie:{
+      maxAge: 20000,
+    }
+    */
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 

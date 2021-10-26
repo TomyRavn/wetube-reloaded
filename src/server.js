@@ -5,6 +5,7 @@ import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
+import { localsMiddleware } from "./middlewares";
 
 //console.log(process.cwd());     //현재 작업 디렉토리 확인 ; 서버를 기동하는 파일 위치 : package.json의 위치
 
@@ -31,22 +32,28 @@ app.use(
   })
 );
 
-//TEST PRINT
-app.use((req, res, next) => {
+//====== TEST PRINT ======//
+// app.use((req, res, next) => {
+
+//** RESPONSE LOCALS(전역변수로 사용 가능)
+// res.locals.siteName = "Wetube"; -> middlewares.js 로 이동
+
 //1. HEADER
 //console.log(req.headers);
 //next();
 //2. SESSION ID
-    req.sessionStore.all( (error, sessions) => {
-        console.log(sessions);
-        next();
-    });
-});
+//     req.sessionStore.all( (error, sessions) => {
+//         console.log(sessions);
+//         next();
+//     });
+// });
 //3. SESSION ID PRINT
 // app.get("/add-one", (req, res, next) => {
 //  return res.send(`${req.session.id}`);
 // });
+//=== END OF TEST PRINT ===//
 
+app.use(localsMiddleware);          //localsMiddleware에서 세션을 접근하려면 세션 middleware 다음에 위치해야 함
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

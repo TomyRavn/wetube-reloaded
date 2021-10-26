@@ -1,6 +1,7 @@
 import express from "express"; // == const express = require("express");
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -27,8 +28,9 @@ app.use(express.urlencoded({ extended: true })); //<HTML Form> to <JS Object>
 app.use(
   session({
     secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,     //session을 수정할 때만 세션을 DB에 저장 => (2021.10.26) 현재 수정은 userController 로그인 시에만 이루어짐
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube" }),
   })
 );
 
@@ -53,7 +55,7 @@ app.use(
 // });
 //=== END OF TEST PRINT ===//
 
-app.use(localsMiddleware);          //localsMiddleware에서 세션을 접근하려면 세션 middleware 다음에 위치해야 함
+app.use(localsMiddleware); //localsMiddleware에서 세션을 접근하려면 세션 middleware 다음에 위치해야 함
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

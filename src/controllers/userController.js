@@ -165,25 +165,31 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
 
   //※create exists => challenge
   const pageTitle = "Edit Profile";
+  const user = await User.findById(_id);
   const exists = await User.exists({ $or: [{ username }, { email }] });
+
   if (exists) {
-    return res.status(400).render("edit-profile", {
-      pageTitle,
-      errorMessage: "This username/email is already taken.",
-    });
+    if(user.username != username || user.email != email) {
+      return res.status(400).render("edit-profile", {
+        pageTitle,
+        errorMessage: "This username/email is already taken.",
+      });
+    }
   }
 
   //2. Create User Variable(Option Setting)
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
@@ -223,7 +229,8 @@ export const postChangePassword = async (req, res) => {
     },
     body: { oldPassword, newPassword, newPasswordConfirmation },
   } = req;
-  const ok = await bcrypt.compare(oldPassword, password);
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
   if (!ok) {
     return res.status(400).render("users/change-password", {
       pageTitle: "Change Password",
@@ -236,12 +243,10 @@ export const postChangePassword = async (req, res) => {
       errorMessage: "The password does not match the confirmation",
     });
   }
-  const user = await User.findById(_id);
-  user.password = newpassword;
+  user.password = newPassword;
   await user.save();
-  req.session.user.password = user.password");
 
-  return res.redirect("/");
+  return res.redirect("/users/logout");
 };
 
 export const see = (req, res) => res.send("See User");

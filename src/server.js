@@ -61,6 +61,7 @@ app.use(
 //=== END OF TEST PRINT ===//
 
 app.use(localsMiddleware); //localsMiddleware에서 세션을 접근하려면 세션 middleware 다음에 위치해야 함
+app.use("/uploads", express.static("uploads"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

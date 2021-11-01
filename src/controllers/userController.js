@@ -162,8 +162,46 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  //※create exists => challenge
+  const pageTitle = "Edit Profile";
+  const exists = await User.exists({ $or: [{ username }, { email }] });
+  if (exists) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "This username/email is already taken.",
+    });
+  }
+
+  //2. Create User Variable(Option Setting)
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+
+  //1. Direct Edit
+  // req.session.user = {
+  //   ...req.session.user,
+  //   name,
+  //   email,
+  //   username,
+  //   location,
+  // };
+  return res.redirect("/users/edit");
 };
 
 export const logout = (req, res) => {

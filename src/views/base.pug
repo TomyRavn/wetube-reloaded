@@ -16,9 +16,9 @@ html(lang="ko")
                         a(href="/search") Search
                     if loggedIn
                         li
-                            a(href="/users/logout") Log Out 
+                            a(href="/users/edit") #{loggedInUser.name}의 Profile
                         li
-                            a(href="/my-profile") #{loggedInUser.name}의 Profile
+                            a(href="/users/logout") Log Out 
                     else
                         li
                             a(href="/join") Join

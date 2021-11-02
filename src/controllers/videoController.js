@@ -10,7 +10,9 @@ export const home = async (req, res) => {
 
   //2. Promise
   try {
-    const videos = await Video.find({}).sort({ createdAt: "desc" });
+    const videos = await Video.find({})
+      .sort({ createdAt: "desc" })
+      .populate("owner");
     return res.render("home", { pageTitle: "Home", videos });
   } catch (error) {
     return res.status(400).render("server-error", { error });
@@ -47,7 +49,7 @@ export const postEdit = async (req, res) => {
 
   //const video = await Video.exists({ _id: id }); //Error 검출만을 위함
   const video = await Video.findById(id);
-  
+
   if (!video)
     return res.status(404).render("404", { pageTitle: "Video not found." });
   if (String(video.owner) !== String(_id)) {

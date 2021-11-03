@@ -57,7 +57,7 @@ const handleTimeUpdate = () => {
 };
 
 const handleTimelineChange = (event) => {
-  const {
+  const { 
     target: { value },
   } = event;
   video.currentTime = value;

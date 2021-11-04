@@ -1,3 +1,2 @@
 import "../scss/styles.scss";
-
-console.log("it works!");
+import regeneratorRuntime from "regenerator-runtime";   //front-end async,await 사용

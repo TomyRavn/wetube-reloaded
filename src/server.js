@@ -7,6 +7,7 @@ import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import { localsMiddleware } from "./middlewares";
+import apiRouter from "./routers/apiRouter";
 
 //console.log(process.cwd());     //현재 작업 디렉토리 확인 ; 서버를 기동하는 파일 위치 : package.json의 위치
 
@@ -66,6 +67,7 @@ app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
+app.use("/api", apiRouter);
 
 // //1. inline(Finalware)
 // app.get("/", (req, res) =>

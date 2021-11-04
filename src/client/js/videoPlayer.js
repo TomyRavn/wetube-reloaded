@@ -112,8 +112,13 @@ const handleMouseLeave = () => {
 
 const handleKeyDown = (event) => {
   if (event.keyCode === 32) handlePlayClick();
-  else if(event.keyCode === 37) video.currentTime -= 5;
-  else if(event.keyCode === 39) video.currentTime += 5;
+  else if (event.keyCode === 37) video.currentTime -= 5;
+  else if (event.keyCode === 39) video.currentTime += 5;
+};
+
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, { method: "POST" });
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -123,6 +128,7 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", handleEnded);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);

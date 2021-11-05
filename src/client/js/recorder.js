@@ -1,3 +1,4 @@
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 const startBtn = document.getElementById("startBtn");
 const video = document.getElementById("preview");
 
@@ -5,11 +6,21 @@ let stream;
 let recorder;
 let videoFile;
 
-const handleDownload = () => {
-  const a = document.createElement("a");
+const handleDownload = async () => {
+  const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load(); //사용자가 소프트웨어를 사용하게 함으로써 기다려줘야 함
 
-  a.href = videoFile;
-  a.download = "MyRecording.webm";
+  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
+
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4"); //초당 60프레임으로 webm파일을 mp4로 인코딩
+
+  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+  const mp4Url = URL.createObjectURL(mp4Blob);
+
+  const a = document.createElement("a");
+  a.href = mp4Url;
+  a.download = "MyRecording.mp4";
   document.body.appendChild(a);
   a.click();
 };

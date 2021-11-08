@@ -80,7 +80,7 @@ export const getUpload = (req, res) => {
 export const postUpload = async (req, res) => {
   //const file = req.file;
   //=> ES6
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
   const {
     user: { _id },
@@ -106,7 +106,8 @@ export const postUpload = async (req, res) => {
       description,
       //fileUrl: file.path,
       //=> ES6
-      fileUrl,
+      fileUrl: video[0].path.replace(/[\\]/g, "/"),
+      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

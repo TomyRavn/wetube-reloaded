@@ -2,6 +2,7 @@ import express from "express"; // == const express = require("express");
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import flash from "express-flash";
 
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -52,7 +53,7 @@ app.use(
 //2. SESSION ID
 //     req.sessionStore.all( (error, sessions) => {
 //         console.log(sessions);
-//         next();
+//         next(); 
 //     });
 // });
 //3. SESSION ID PRINT
@@ -61,6 +62,7 @@ app.use(
 // });
 //=== END OF TEST PRINT ===//
 
+app.use(flash());
 app.use(localsMiddleware);                          //localsMiddleware에서 세션을 접근하려면 세션 middleware 다음에 위치해야 함
 app.use("/uploads", express.static("uploads"));     //서버의 해당 폴더 미인지 상태를 변경 -> 미리 정해서 알려줌
 app.use("/static", express.static("assets"));

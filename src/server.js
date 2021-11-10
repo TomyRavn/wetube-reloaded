@@ -26,6 +26,8 @@ app.set("views", process.cwd() + VIEW_ROUTE + "/views");
 //순서 : 미들웨어부터 먼저
 app.use(logger); //Console route log
 app.use(express.urlencoded({ extended: true })); //<HTML Form> to <JS Object>
+// app.use(express.json());
+app.use(express.json());
 
 app.use(
   session({

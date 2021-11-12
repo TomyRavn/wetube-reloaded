@@ -63,8 +63,8 @@ const handleVolumeChange = (event) => {
 const formatTime = (seconds) =>
   new Date(seconds * 1000).toISOString().substr(14, 5);
 
-const handleLoadedMetadata = () => {
-  totalTime.innerText = formatTime(Math.floor(video.duration));
+const handleLoadedMetadata = async () => {
+  totalTime.innerText = await formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
 };
 
